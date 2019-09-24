@@ -11,14 +11,34 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(dplyr)
 library(readxl)
+library(janitor)
 library(tidyverse)
 ```
 
 ```{r}
-x <- read_excel("class_enrollment_summary_by_term_9.24.19.xlsx")
+x <- read_excel("class_enrollment_summary_by_term_9.24.19.xlsx", skip = 3) %>% 
+  clean_names()
 ```
 
 ```{r}
+#largest course enrollment in government 
+x %>% 
+  gov_enrollment <- x
+filter(course_department == "Government") %>% 
+arrange(desc(u_grad))
+```
 
+```{r}
+#which class had the most drops
+enrollment_old <- read_excel("class_enrollment_summary_by_term_9.17.19.xlsx", skip = 3) %>% 
+  clean_names()
+
+```
+
+```{r}
+x %>% 
+  group_by(course_department) %>% 
+  summarize(avg = mean(u_grad))
+select(course_name, course_title, u_grad)
 ```
 
